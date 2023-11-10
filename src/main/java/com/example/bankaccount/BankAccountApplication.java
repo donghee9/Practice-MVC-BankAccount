@@ -14,9 +14,10 @@ import java.util.Scanner;
 public class BankAccountApplication {
 
     private final BankForClientController bankForClientController;
-    private  final BankForAdminController bankForAdminController;
+    private final BankForAdminController bankForAdminController;
 
     public BankAccountApplication(BankForClientController bankForClientController, BankForAdminController bankForAdminController) {
+
         this.bankForClientController = bankForClientController;
         this.bankForAdminController = bankForAdminController;
     }
@@ -57,7 +58,7 @@ public class BankAccountApplication {
                             System.out.println("애플리케이션을 종료합니다.");
                             return;
                         case "A12":
-                            AdminGetCilent(scanner);
+                            adminGetClient(scanner);
                             System.out.println("직원 전용 탭입니다");
                         default:
                             System.out.println("잘못된 선택입니다. 1부터 5까지의 숫자를 입력하세요.");
@@ -68,9 +69,21 @@ public class BankAccountApplication {
         };
     }
 
-    private String AdminGetCilent(Scanner scanner) {
+    private void adminGetClient(Scanner scanner) {
+        System.out.println("직원 전용 탭입니다.");
+        System.out.print("관리자 ID: ");
+        String inputAdminId = scanner.nextLine();
+        System.out.print("관리자 비밀번호: ");
+        String inputAdminPw = scanner.nextLine();
+        System.out.print("사용자 이름: ");
+        String inputUserName = scanner.nextLine();
+        System.out.print("사용자 ID: ");
+        String inputUserId = scanner.nextLine();
 
+        ResponseEntity<?> response = bankForAdminController.AdminClientInfo(inputAdminId, inputAdminPw, inputUserName, inputUserId);
+        System.out.println(response.getBody());
     }
+
 
     private void createAccount(Scanner scanner) {
         System.out.print("이름: ");
@@ -91,17 +104,40 @@ public class BankAccountApplication {
     }
 
     private void deposit(Scanner scanner) {
-        // 입금 관련 정보를 입력받고, Controller의 입금 메서드를 호출합니다.
-        // ...
+        System.out.print("사용자 ID: ");
+        String userId = scanner.nextLine();
+        System.out.print("비밀번호: ");
+        String pw = scanner.nextLine();
+        System.out.print("계좌번호: ");
+        String accountNumber = scanner.nextLine();
+        System.out.print("입금액: ");
+        double depositAmount = Double.parseDouble(scanner.nextLine());
+
+        ResponseEntity<String> response = bankForClientController.deposit(userId, pw, accountNumber, depositAmount);
+        System.out.println(response.getBody());
     }
 
     private void withdraw(Scanner scanner) {
-        // 출금 관련 정보를 입력받고, Controller의 출금 메서드를 호출합니다.
-        // ...
+        System.out.print("사용자 ID: ");
+        String userId = scanner.nextLine();
+        System.out.print("비밀번호: ");
+        String pw = scanner.nextLine();
+        System.out.print("계좌번호: ");
+        String accountNumber = scanner.nextLine();
+        System.out.print("출금액: ");
+        double withdrawAmount = Double.parseDouble(scanner.nextLine());
+
+        ResponseEntity<String> response = bankForClientController.withdraw(userId, pw, accountNumber, withdrawAmount);
+        System.out.println(response.getBody());
     }
 
     private void listAccounts(Scanner scanner) {
-        // Controller의 계좌 조회 메서드를 호출합니다.
-        // ...
+        System.out.print("사용자 ID: ");
+        String userId = scanner.nextLine();
+        System.out.print("비밀번호: ");
+        String Pw = scanner.nextLine();
+
+        ResponseEntity<?> response = bankForClientController.getAllAccountsForUser(userId, Pw);
+        System.out.println(response.getBody());
     }
 }
